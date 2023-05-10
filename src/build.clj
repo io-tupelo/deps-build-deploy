@@ -97,6 +97,7 @@
 (defn deploy-clojars
   "Build & deploy a source-code JAR file to clojars.org"
   [& args] ; ignore `nil` arg
+  (t/spyx-pretty :deploy-clojars args )
   (build-jar)
   (dd/deploy {:installer :remote
               :artifact  jar-file-name

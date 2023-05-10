@@ -2,10 +2,17 @@
            "test" ; Clojure source files
            ]
  :deps    {org.clojure/clojure           {:mvn/version "1.12.0-alpha3"}
+
            prismatic/schema              {:mvn/version "1.4.1"}
+           io.github.clojure/tools.build {:mvn/version "0.9.4"}
+           slipset/deps-deploy           {:mvn/version "RELEASE"}
            tupelo/tupelo                 {:mvn/version "23.05.04"}
            }
- :aliases {; This target finds dependencies with outdated version numbers
+ :aliases {
+           ; build alias (for deployment)
+           :build        {:ns-default build}
+
+           ; This target finds dependencies with outdated version numbers
            :old          {:deps      {com.github.liquidz/antq {:mvn/version "RELEASE"}} ; NOT `:extra-deps` !!!
                           :main-opts ["-m" "antq.core"]
                           }
