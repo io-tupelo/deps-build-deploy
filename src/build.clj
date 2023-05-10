@@ -9,29 +9,9 @@
     [tupelo.string :as str]
     ))
 
-;(comment
-;  ;---------------------------------------------------------------------------------------------------
-;  ; User-supplied values
-;
-;  (def version-str "23.05.04") ; snapshot versions MUST look like `23.03.03-SNAPSHOT` (i.e. no letters like `-03a`)
-;  (def lib-name 'tupelo/tupelo) ; must be a namespaced-qualified symbol, interpreted as `group-id/artifact-id`
-;  (def scm-root "github.com/cloojure/tupelo")
-;  (def src-dirs ["src"])
-;  (def resource-dirs ["resources"])
-;  (def build-folder "target")
-;
-;
-;  ;===================================================================================================
-;  ; Derived values
-;  (def git-tag-str (str "v" version-str)) ; a git tag like `v23.01.31` will be added
-;  (def jar-content (str build-folder "/classes")) ; folder where we collect files to pack in a jar
-;  (def basis (b/create-basis {:project "deps.edn"})) ; basis structure (read details in the article)
-;  (def jar-file-name (format "%s/%s-%s.jar" build-folder (name lib-name) version-str)) ; eg `target/tupelo-23.05.04.jar`
-;  )
-
 (def opts-default
   {:version-str   "23.05.04" ; snapshot versions MUST look like `23.03.03-SNAPSHOT` (i.e. no letters like `-03a`)
-   :lib-name      'mygroup/myartifact ; must be a namespaced-qualified symbol, interpreted as `group-id/artifact-id`
+   :lib-name      'mygroup/myartifact ; must be a namespaced-qualified symbol, interpreted as `group-id/artifact-id` for Maven
    :scm-root      "github.com/myorg/myproj" ; must match :lib-name above
    :src-dirs      ["src"]
    :resource-dirs ["resources"]
@@ -74,7 +54,6 @@
   "Tag release by prepending a `v` char to the version string and calling `git tag`
     (eg version `23.03.15` => tag `v23.03.15`)."
   [ctx & others] ; ignore `nil` arg
-  ; (spyx-pretty :tag-release ctx )
   (with-map-vals ctx [version-str lib-name scm-root src-dirs resource-dirs build-folder
                       git-tag-str jar-content jar-file-name basis]
     (check-all-committed-or-throw ctx)
@@ -126,7 +105,8 @@
 (defn deploy-clojars
   "Build & deploy a source-code JAR file to clojars.org"
   [opts & others] ; ignore `nil` arg
-  (spyx-pretty :deploy-clojars-1 opts)
+  (newline)
+  (spyx-pretty :deploy-clojars--opts opts)
   (let [opts (validate-opts opts)]
     (with-map-vals opts [version-str lib-name scm-root src-dirs resource-dirs build-folder ]
       (let [git-tag-str   (str "v" version-str) ; a git tag like `v23.01.31` will be added
@@ -135,8 +115,7 @@
             jar-file-name (format "%s/%s-%s.jar" build-folder (name lib-name) version-str) ; eg `target/tupelo-23.05.04.jar`
 
             ctx           (glue opts (vals->map git-tag-str jar-content jar-file-name basis))]
-
-        (spyx-pretty :deploy-clojars-2 ctx)
+        ; (spyx-pretty :deploy-clojars--ctx ctx)
         (build-jar ctx)
         (dd/deploy {:installer :remote
                     :artifact  jar-file-name
