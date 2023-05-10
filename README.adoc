@@ -5,6 +5,88 @@ Generic tool to build a JAR file and deploy it to CLOJARS
 
 == Usage
 
+For a live example of the deployment tool in action, please see
+https://github.com/cloojure/tupelo[the Tupelo Clojure library].
+
+In your project, create a helper script `deploy-clojars.bash` for deployment like:
+```
+#!/bin/bash
+set -v
+
+env  \
+  CLOJARS_USERNAME=myusername  \
+  CLOJARS_PASSWORD=mypassword  \
+  clj -T:build deploy-clojars
+```
+
+Your project should also have an entry in `deps.edn` like:
+```
+; build alias (for deployment)
+:build        {:extra-deps {
+                           io.github.io-tupelo/deps-build-deploy
+                           {:git/sha "a8e32aefe55730119040548925cf0eba9ceacb48"}
+                               ; ***** use latest Git SHA above *****
+
+                           io.github.clojure/tools.build {:mvn/version "0.9.4"}
+                           slipset/deps-deploy           {:mvn/version "RELEASE"}
+                           }
+              :ns-default build
+
+              ; ***** SUBSTITUTE YOUR OWN VALUES BELOW *****
+              :exec-args  {:version-str   "23.05.03-SNAPSHOT" ; snapshot versions MUST look like `23.03.03-SNAPSHOT` (i.e. no letters like `-03a`)
+                           :lib-name      tupelo/tupelo ; must be a namespaced-qualified symbol, interpreted as `group-id/artifact-id`
+                           :scm-root      "github.com/cloojure/tupelo"
+                           :src-dirs      ["src"]
+                           :resource-dirs ["resources"]
+                           :build-folder  "target"
+                           }
+              }
+```
+
+With the above configured, all you need is
+
+    ./deploy-clojars.bash
+
+This will tag your release, build the JAR file, and upload it to CLOJARS using your saved
+credentials.
+
+```
+~/tupelo > ./deploy-clojars.bash
+
+env  \
+  CLOJARS_USERNAME=cloojure  \
+  CLOJARS_PASSWORD=`cat ~/alan/clojars.txt`  \
+  clj -T:build deploy-clojars
+
+ :deploy-clojars--opts
+opts =>
+{:build-folder "target",
+ :lib-name tupelo/tupelo,
+ :resource-dirs ["resources"],
+ :scm-root "github.com/cloojure/tupelo",
+ :src-dirs ["src"],
+ :version-str "23.05.03-SNAPSHOT"}
+
+Build folder "target" removed
+Tagging release: "v23.05.03-SNAPSHOT"
+Pushing release & tags...
+Jar file created: "target/tupelo-23.05.03-SNAPSHOT.jar"
+Deploying tupelo/tupelo-23.05.03-SNAPSHOT to repository clojars as cloojure
+Retrieving tupelo/tupelo/23.05.03-SNAPSHOT/maven-metadata.xml (1k)
+    from https://clojars.org/repo/
+Sending tupelo/tupelo/23.05.03-SNAPSHOT/tupelo-23.05.03-20230510.220025-5.pom (4k)
+    to https://clojars.org/repo/
+Sending tupelo/tupelo/23.05.03-SNAPSHOT/tupelo-23.05.03-20230510.220025-5.jar (146k)
+    to https://clojars.org/repo/
+Retrieving tupelo/tupelo/maven-metadata.xml (11k)from https://clojars.org/repo/
+Sending tupelo/tupelo/23.05.03-SNAPSHOT/maven-metadata.xml (1k)
+    to https://clojars.org/repo/
+Sending tupelo/tupelo/maven-metadata.xml (11k)to https://clojars.org/repo/
+done.
+
+~/tupelo >
+```
+
 == License
 
 Copyright © 2023  Alan Thompson
