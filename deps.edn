@@ -1,12 +1,12 @@
 {:paths   ["src" ; Clojure source files
            "test" ; Clojure source files
            ]
- :deps    {org.clojure/clojure           {:mvn/version "1.12.0-alpha3"}
+ :deps    {org.clojure/clojure           {:mvn/version "1.11.1"}
 
            prismatic/schema              {:mvn/version "1.4.1"}
            io.github.clojure/tools.build {:mvn/version "0.9.4"}
            slipset/deps-deploy           {:mvn/version "RELEASE"}
-           tupelo/tupelo                 {:mvn/version "23.05.04"}
+           tupelo/tupelo                 {:mvn/version "23.05.31"}
            }
  :aliases {
            ; build alias (for deployment)

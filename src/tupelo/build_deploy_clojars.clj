@@ -1,4 +1,4 @@
-(ns build
+(ns build-deploy-clojars
   (:use tupelo.core)
   (:require
     [clojure.tools.build.api :as b]
@@ -102,7 +102,7 @@
             :jar-file  jar-file-name})
     (println (format "Jar file created: \"%s\"" jar-file-name))))
 
-(defn deploy-clojars
+(defn build-deploy-clojars
   "Build & deploy a source-code JAR file to clojars.org"
   [opts & others] ; ignore `nil` arg
   (newline)
