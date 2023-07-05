@@ -1,4 +1,4 @@
-(ns build-deploy-clojars
+(ns tupelo.deps-build-deploy
   (:use tupelo.core)
   (:require
     [clojure.tools.build.api :as b]
