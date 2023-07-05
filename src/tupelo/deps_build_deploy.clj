@@ -102,7 +102,7 @@
             :jar-file  jar-file-name})
     (println (format "Jar file created: \"%s\"" jar-file-name))))
 
-(defn build-deploy-clojars
+(defn deploy-clojars
   "Build & deploy a source-code JAR file to clojars.org"
   [opts & others] ; ignore `nil` arg
   (newline)
