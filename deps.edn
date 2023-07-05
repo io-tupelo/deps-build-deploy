@@ -6,11 +6,11 @@
            prismatic/schema              {:mvn/version "1.4.1"}
            io.github.clojure/tools.build {:mvn/version "0.9.4"}
            slipset/deps-deploy           {:mvn/version "RELEASE"}
-           tupelo/tupelo                 {:mvn/version "23.05.31"}
+           tupelo/tupelo                 {:mvn/version "23.07.04"}
            }
  :aliases {
            ; build alias (for deployment)
-           :build        {:ns-default build}
+           :build        {:ns-default tupelo.deps-build-deploy}
 
            ; This target finds dependencies with outdated version numbers
            :old          {:deps      {com.github.liquidz/antq {:mvn/version "RELEASE"}} ; NOT `:extra-deps` !!!
