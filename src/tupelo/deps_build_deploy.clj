@@ -88,6 +88,12 @@
                   :version       version-str
                   :basis         basis
                   :resource-dirs resource-dirs
+                  :pom-data      [[:licenses
+                                   [:license
+                                    [:name "Eclipse Public License 1.0"]
+                                    [:url "https://opensource.org/license/epl-1-0/"]
+                                    [:distribution "repo"]]]]
+
                   :scm           {:tag                 git-tag-str
                                   :url                 (str "https://" scm-root)
                                   :connection          (str "scm:git:git://" scm-root ".git")
